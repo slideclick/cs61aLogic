@@ -750,6 +750,30 @@ one-through-four
  ; expect 3628800
  (fact 100)
  ; expect 93326215443944152681699238856266700490715968264381621468592963895217599993229915608941463976156518286253697920827223758251185210916864000000000000000000000000
+ 
+ 
+;
+(define fib (lambda (n) (if (< n 2) 1 (+ (fib (- n 1)) (fib (- n 2))))))
+(define range (lambda (a b) (if (= a b) (quote ()) (cons a (range (+ a 1) b)))))
+(map fib (range 0 10))
+; expect (1 1 2 3 5 8 13 21 34 55)
+
+
+;; class
+
+(defn add_simon (x) (+ x 1)) (add_simon 2)
+; expect 3
+(class SimpleClass None
+(begin (defn init (self v)
+(set (attr self v) v))
+(defn getV (self)
+(attr self v))))
+(begin
+(define a (SimpleClass))
+((attr a init) a 37)
+((attr a getV) a))
+; expect 37
+
 (exit)  
   ;; fact code isn't tail , so it can't be optimization
   (define factnew (lambda (n product) (if (<= n 1) product (factnew  (- n 1) (* n  product)))))

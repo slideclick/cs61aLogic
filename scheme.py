@@ -41,6 +41,14 @@ def scheme_eval(expr, env):
         return do_lambda_form(rest, env)
     elif first == "mu":
         return do_mu_form(rest)
+    elif first == "defn":
+        return do_defn_form(rest,env)     
+    elif first == "class":
+        return do_class_form(rest,env)        
+    elif first == "set":
+        return do_set_form(rest,env)      
+    elif first == "attr":
+        return do_attr_form(rest,env)         
     elif first == "define":
         return do_define_form(rest, env)
     elif first == "quote":
@@ -217,8 +225,46 @@ def do_mu_form(vals):
     else:
         body = vals.second[0]
     return MuProcedure(formals, body)
+
+
+def do_set_form(vals,env):
+    lhs, expr  = vals;
+    (targetEnv, name) = lhsEval(lhs, env)
+    targetEnv.define(name, scheme_eval(expr, env))    
+
+def do_class_form(vals,env):
+    name, super, body = vals
+    if super == 'None':
+        super = globalEnv
+    classEnv = Frame(parent = super)
+    env.define(name, PrimitiveProcedure(lambda : Frame(parent = classEnv)))
+    scheme_eval(body, classEnv)
+    
+    
+def lhsEval(lhs, env):
+    (tag, objectExpr, name) = lhs
+    return (scheme_eval(objectExpr, env), name)    
+
+
+def do_attr_form(vals,env):
+    objectExpr, name = vals;
+    return scheme_eval(objectExpr, env).lookup(name)
     
 
+    
+def do_defn_form(vals,env):
+    """(defn init (self v)
+(+ self v))"""
+    name = vals[0];
+    formals = vals.second[0];
+    body =  Pair(vals.second[1],nil);
+    if not scheme_symbolp(name):
+        raise SchemeError('not a proper scheme symbol')
+    define_vals = Pair(formals, body)
+    make_lambda_function = do_lambda_form(define_vals, env)
+    env.define(name,make_lambda_function)    
+    return  name   
+    
 def do_define_form(vals, env):
     """Evaluate a define form with parameters VALS in environment ENV."""
     check_form(vals, 2)
@@ -228,11 +274,11 @@ def do_define_form(vals, env):
         env.define(target, scheme_eval(vals[1], env))
         return target
     elif isinstance(target, Pair):
-        variable = target[0]
+        variable = target[0];
         if not scheme_symbolp(variable):
             raise SchemeError('not a proper scheme symbol')
-        formals = target.second
-        body = vals.second 
+        formals = target.second;
+        body = vals.second ;
         define_vals = Pair(formals, body)
         make_lambda_function = do_lambda_form(define_vals, env)
         env.define(variable,make_lambda_function)
@@ -413,6 +459,8 @@ def scheme_optimized_eval(expr, env):
             return do_lambda_form(rest, env)
         elif first == "mu":
             return do_mu_form(rest)
+        elif first == "defn":
+            return do_defn_form(rest,env)            
         elif first == "define":
             return do_define_form(rest, env)
         elif first == "quote":
@@ -514,6 +562,8 @@ def create_global_frame():
     add_primitives(env)
     return env
 
+    
+    
 @main
 def run(*argv):
     next_line = buffer_input
@@ -533,6 +583,8 @@ def run(*argv):
         except IOError as err:
             print(err)
             sys.exit(1)
-    read_eval_print_loop(next_line, create_global_frame(), startup=True,
+    global  globalEnv
+    globalEnv =       create_global_frame()  
+    read_eval_print_loop(next_line,globalEnv , startup=True,
                          interactive=interactive, load_files=load_files)
     tscheme_exitonclick()
