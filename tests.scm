@@ -750,11 +750,11 @@ one-through-four
  ; expect 3628800
  (fact 100)
  ; expect 93326215443944152681699238856266700490715968264381621468592963895217599993229915608941463976156518286253697920827223758251185210916864000000000000000000000000
-  
+(exit)  
   ;; fact code isn't tail , so it can't be optimization
   (define factnew (lambda (n product) (if (<= n 1) product (factnew  (- n 1) (* n  product)))))
   (factnew 1000 1)
-  ; expect 1
+  ; expect 3628800
 ;;;;;;;;;;;;;;;;;;;;
 ;;; Extra credit ;;;
 ;;;;;;;;;;;;;;;;;;;;
@@ -767,4 +767,4 @@ one-through-four
     (sum (- n 1) (+ n total))))
 (sum 1001 0)
 ; expect 501501
-(exit)
+
