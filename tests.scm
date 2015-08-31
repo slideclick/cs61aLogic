@@ -744,12 +744,21 @@ one-through-four
 (len '(1 2 3 4))
 ; expect 4
 
-
+; simon
+ (define fact (lambda (n) (if (<= n 1) 1 (* n (fact (- n 1))))))
+ (fact 10)
+ ; expect 3628800
+ (fact 100)
+ ; expect 93326215443944152681699238856266700490715968264381621468592963895217599993229915608941463976156518286253697920827223758251185210916864000000000000000000000000
+  
+  ;; fact code isn't tail , so it can't be optimization
+  (fact 1000)
+  ; expect 1
 ;;;;;;;;;;;;;;;;;;;;
 ;;; Extra credit ;;;
 ;;;;;;;;;;;;;;;;;;;;
 
-(exit)
+
 
 ; Tail call optimization test
 (define (sum n total)
@@ -757,3 +766,4 @@ one-through-four
     (sum (- n 1) (+ n total))))
 (sum 1001 0)
 ; expect 501501
+(exit)
