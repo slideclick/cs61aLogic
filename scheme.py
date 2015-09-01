@@ -1,5 +1,8 @@
 """This module implements the core Scheme interpreter functions, including the
 eval/apply mutual recurrence, environment model, and read-eval-print loop.
+
+TO REMOVE print from code:    ; *print\(.*
+
 """
 
 from scheme_primitives import *
