@@ -762,16 +762,21 @@ one-through-four
 ;; class
 
 (defn add_simon (x) (+ x 1)) (add_simon 2)
-; expect 3
+; expect 4
 (class SimpleClass None
 (begin (defn init (self v)
 (set (attr self v) v))
 (defn getV (self)
-(attr self v))))
+(attr self v))
+(defn setV (self d)
+(set (attr self v) d))
+))
 (begin
 (define a (SimpleClass))
 ((attr a init) a 37)
-((attr a getV) a))
+((attr a setV) a (add_simon 38 ))
+((attr a getV) a)
+)
 ; expect 37
 
 (exit)  
