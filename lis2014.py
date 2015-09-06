@@ -141,7 +141,7 @@ def eval(x, env=global_env):
         env.find(var)[var] = eval(exp, env)
     elif x[0] == 'lambda':         # (lambda (var...) body)
         (_, parms, body) = x
-        return Procedure(parms, body, env)
+        return lambda *args: eval(body, Env(parms, args, env))#return Procedure(parms, body, env)
     else:                          # (proc arg...)
         proc = eval(x[0], env)
         args = [eval(exp, env) for exp in x[1:]]
