@@ -206,7 +206,19 @@ eval(parse('''(
 
 
 eval(parse('''(
-(lambda (y) (((lambda (y) (lambda (x) (* y 2))) 3) 0)) 4
+(lambda (y) 
+    (
+        ((lambda (y) 
+        (lambda (x) 
+            (* y 2))) 
+    
+        3) 
+    
+    0)
+    
+    ) 
+
+4
 )'''))
 
     
