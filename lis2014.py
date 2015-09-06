@@ -203,6 +203,12 @@ eval(parse('''(
     (+ 1 a)) 
 10
 )'''))
+
+
+eval(parse('''(
+(lambda (y) (((lambda (y) (lambda (x) (* y 2))) 3) 0)) 4
+)'''))
+
     
 import unittest
 class TestLisp(unittest.TestCase):
