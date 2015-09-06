@@ -3,7 +3,11 @@
 ## (c) Peter Norvig, 2010-14; See http://norvig.com/lispy.html
 
 ################ Types
-
+'''
+>>> eval(parse('(define fact (lambda (n) (if (<= n 1) 1 (* n (fact (- n 1))))))'))
+>>> eval(parse('(fact 10)'))
+3628800
+'''
 from __future__ import division
 
 Symbol = str          # A Lisp Symbol is implemented as a Python str
@@ -52,11 +56,11 @@ def standard_env():
     env = Env()
     env.update(vars(math)) # sin, cos, sqrt, pi, ...
     env.update({
-        '+':op.add, '-':op.sub, '*':op.mul, '/':op.div, 
+        '+':op.add, '-':op.sub, '*':op.mul, 
         '>':op.gt, '<':op.lt, '>=':op.ge, '<=':op.le, '=':op.eq, 
         'abs':     abs,
         'append':  op.add,  
-        'apply':   apply,
+
         'begin':   lambda *x: x[-1],
         'car':     lambda x: x[0],
         'cdr':     lambda x: x[1:], 
@@ -142,3 +146,12 @@ def eval(x, env=global_env):
         proc = eval(x[0], env)
         args = [eval(exp, env) for exp in x[1:]]
         return proc(*args)
+        
+import unittest
+class TestLisp(unittest.TestCase):
+    pass
+if __name__ == "__main__":     
+    import doctest
+    doctest.testmod() 
+    #unittest.main()
+    import argparse        
