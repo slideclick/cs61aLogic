@@ -9,6 +9,7 @@
 3628800
 '''
 from __future__ import division
+import functools
 import re
 ###############################
 
@@ -41,7 +42,8 @@ def trace(fn):
             PREFIX = PREFIX[:-4]
             raise
         # Here, print out the return value.
-        log('{0}({1}) -> {2}'.format(fn.__name__, ', '.join(reprs), result))
+        log('-> {0}'.format(result))
+        #log('{0}({1}) -> {2}'.format(fn.__name__, ', '.join(reprs), result))
         return result
     return wrapped
 
@@ -160,7 +162,7 @@ class Procedure(object):
         return eval(self.body, Env(self.parms, args, self.env))
 
 ################ eval
-
+@trace
 def eval(x, env=global_env):
     "Evaluate an expression in an environment."
     if isinstance(x, Symbol):      # variable reference
@@ -183,23 +185,30 @@ def eval(x, env=global_env):
     elif x[0] == 'lambda':         # (lambda (var...) body)
         (_, parms, body) = x
         return CreateFunc(parms, body, env)
-        return Procedure(parms, body, env)
+        #return Procedure(parms, body, env)
         #return lambda *args: eval(body, Env(parms, args, env))#
     else:                          # (proc arg...)
         proc = eval(x[0], env)
         args = [eval(exp, env) for exp in x[1:]]
         return proc(*args)
-
+#@trace
 def CreateFunc(parms,body,env):
     def LAMBDA(*args):
+        print('it is ME!!!!')
         return eval(body,Env(parms, args, env))
     return LAMBDA    
-        
+
+eval(parse('''(
+(lambda (a) 
+    (+ 1 a)) 
+10
+)'''))
+    
 import unittest
 class TestLisp(unittest.TestCase):
     pass
 if __name__ == "__main__":     
     import doctest
-    doctest.testmod() 
+    #doctest.testmod() 
     #unittest.main()
     import argparse        
