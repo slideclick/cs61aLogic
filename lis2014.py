@@ -141,11 +141,17 @@ def eval(x, env=global_env):
         env.find(var)[var] = eval(exp, env)
     elif x[0] == 'lambda':         # (lambda (var...) body)
         (_, parms, body) = x
-        return lambda *args: eval(body, Env(parms, args, env))#return Procedure(parms, body, env)
+        return CreateFunc(parms, body, env)
+        #return lambda *args: eval(body, Env(parms, args, env))#return Procedure(parms, body, env)
     else:                          # (proc arg...)
         proc = eval(x[0], env)
         args = [eval(exp, env) for exp in x[1:]]
         return proc(*args)
+
+def CreateFunc(parms,body,env):
+    def LAMBDA(*args):
+        return eval(body,Env(parms, args, env))
+    return LAMBDA    
         
 import unittest
 class TestLisp(unittest.TestCase):
