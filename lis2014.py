@@ -184,7 +184,11 @@ def eval(x, env=global_env):
         env.find(var)[var] = eval(exp, env)
     elif x[0] == 'lambda':         # (lambda (var...) body)
         (_, parms, body) = x
-        return CreateFunc(parms, body, env)
+        def f(*args):
+            localEnv = Env(parms, args, env)
+            return eval(body,localEnv )
+        return f    
+        #return CreateFunc(parms, body, env)
         #return Procedure(parms, body, env)
         #return lambda *args: eval(body, Env(parms, args, env))#
     else:                          # (proc arg...)
@@ -227,6 +231,6 @@ class TestLisp(unittest.TestCase):
     pass
 if __name__ == "__main__":     
     import doctest
-    #doctest.testmod() 
+    doctest.testmod() 
     #unittest.main()
     import argparse        
