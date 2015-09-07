@@ -1,0 +1,9 @@
+sedPython\logic\logic.py
+
+这个目录里面代码支持class但是还不支持超类
+
+这个目录代表了对OO的最初开发
+
+ if super == 'None':
+ 
+ 这里有个小写问题，还没有解决。后来sedPython才解决的
