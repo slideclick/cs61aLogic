@@ -783,6 +783,35 @@ one-through-four
 ((attr a getV) a)
 )
 ; expect 39
+(class baseclass None (begin (defn getSuper (self)(+ 1 (attr self  n)))))
+(class SimpleClass baseclass
+(begin (defn init (self v)
+(begin (set (attr self n) 0)(set (attr self v) v)))
+(defn getV (self)
+(attr self v))
+(defn getAV (self)
+(/ (attr self v)(attr self n)))
+(defn getAVUsingSuper (self)
+(/ (attr self v)((attr self getSuper) self)))
+(defn setV (self d)
+(set (attr self v) d))
+(defn addValue (self d)
+(begin (set (attr self v) (+ ((attr self getV) self) d))
+(set (attr self n) (+ 1 (attr self n) )))
+)
+))
+
+(begin
+(define a (SimpleClass))
+((attr a init) a 0)
+((attr a getV) a)
+((attr a addValue) a  2 )
+((attr a addValue) a  3 )
+((attr a addValue) a  10 )
+((attr a getAV) a   )
+((attr a getAVUsingSuper) a   )
+)
+
 
 (exit)  
   ;; fact code isn't tail , so it can't be optimization

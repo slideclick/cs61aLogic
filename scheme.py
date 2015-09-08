@@ -126,6 +126,7 @@ class Frame:
         if symbol in self.bindings:
             return self.bindings[symbol]
         elif self.parent:
+            print('looking for {0}'.format(symbol,))
             return self.parent.lookup(symbol)
         raise SchemeError("unknown identifier: {0}".format(str(symbol)))
 

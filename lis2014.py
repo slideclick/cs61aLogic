@@ -164,7 +164,7 @@ class Procedure(object):
         return eval(self.body, Env(self.parms, args, self.env))
 
 ################ eval
-#@trace
+@trace
 def eval(x, env=global_env):
     "Evaluate an expression in an environment."
     if isinstance(x, Symbol):      # variable reference
@@ -190,7 +190,7 @@ def eval(x, env=global_env):
             localEnv = Env(parms, args, env)
             return eval(body,localEnv )
         #return f    
-        return CreateFunc(parms, body, env)
+        return createFunc(parms, body, env)
         #return Procedure(parms, body, env)
         #return lambda *args: eval(body, Env(parms, args, env))#
     else:                          # (proc arg...)
@@ -198,7 +198,7 @@ def eval(x, env=global_env):
         args = [eval(exp, env) for exp in x[1:]]
         return proc(*args)
 #@trace
-def CreateFunc(parms,body,env):
+def createFunc(parms,body,env):
     def LAMBDA(*args):
         #print('it is ME!!!!')
         localEnv = Env(parms, args, env)
@@ -212,21 +212,21 @@ eval(parse('''(
 )'''))
 
 
-eval(parse('''(
-(lambda (y) 
-    (
-        ((lambda (y) 
-        (lambda (x) 
-            (* y 2))) 
+#eval(parse('''(
+#(lambda (y) 
+#    (
+#        ((lambda (y) 
+#        (lambda (x) 
+#            (* y 2))) 
     
-        3) 
+#        3) 
     
-    0)
+#    0)
     
-    ) 
+#    ) 
 
-4
-)'''))
+#4
+#)'''))
 
     
 import unittest
@@ -234,6 +234,6 @@ class TestLisp(unittest.TestCase):
     pass
 if __name__ == "__main__":     
     import doctest
-    doctest.testmod() 
+    #doctest.testmod() 
     #unittest.main()
     import argparse        
