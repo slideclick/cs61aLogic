@@ -762,7 +762,12 @@ one-through-four
 ;; class
 
 (defn add_simon (x) (+ x 1)) (add_simon 2)
-; expect 4
+; expect 3
+ ((lambda (y) (((lambda (y) (lambda (x) (* y 2))) 3) 0)) 4)
+ ; expect 6
+ 
+  ((mu (y) (((mu (y) (mu (x) (* y 2))) 3) 0)) 4)
+ ; expect 8
 (class SimpleClass None
 (begin (defn init (self v)
 (set (attr self v) v))
@@ -777,7 +782,7 @@ one-through-four
 ((attr a setV) a (add_simon 38 ))
 ((attr a getV) a)
 )
-; expect 37
+; expect 39
 
 (exit)  
   ;; fact code isn't tail , so it can't be optimization

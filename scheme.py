@@ -75,6 +75,12 @@ def scheme_apply(procedure, args, env):
     elif isinstance(procedure, MuProcedure):
         frame = env.make_call_frame(procedure.formals, args)
         return scheme_eval(procedure.body, frame)
+    elif type(procedure) is type(lambda:None): #callable(procedure): #
+        try:
+            #print(type(procedure))
+            return procedure(*args)#here is for SchemeClass __call__
+        except Exception as e:
+            raise Exception("Cannot SchemeType  {0}".format(str(procedure))) from e    
     else:
         raise SchemeError("Cannot call {0}".format(str(procedure)))
 
@@ -240,7 +246,7 @@ def do_class_form(vals,env):
     if super == 'None':
         super = globalEnv
     classEnv = Frame(parent = super)
-    env.define(name, PrimitiveProcedure(lambda : Frame(parent = classEnv)))
+    env.define(name, lambda : Frame(parent = classEnv))
     scheme_eval(body, classEnv)
     
     

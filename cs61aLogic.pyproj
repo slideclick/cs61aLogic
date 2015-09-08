@@ -26,6 +26,7 @@
   <ItemGroup>
     <Compile Include="autograder.py" />
     <Compile Include="buffer.py" />
+    <Compile Include="lis2014.py" />
     <Compile Include="logic.py" />
     <Compile Include="scheme.py" />
     <Compile Include="scheme_grader.py" />
