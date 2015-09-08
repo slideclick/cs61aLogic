@@ -7,6 +7,8 @@
 >>> eval(parse('(define fact (lambda (n) (if (<= n 1) 1 (* n (fact (- n 1))))))'))
 >>> eval(parse('(fact 10)'))
 3628800
+>>> eval(parse(' ((lambda (y) (((lambda (y) (lambda (x) (* y 2))) 3) 0)) 4)'))
+6
 '''
 from __future__ import division
 import functools
@@ -162,7 +164,7 @@ class Procedure(object):
         return eval(self.body, Env(self.parms, args, self.env))
 
 ################ eval
-@trace
+#@trace
 def eval(x, env=global_env):
     "Evaluate an expression in an environment."
     if isinstance(x, Symbol):      # variable reference
@@ -198,8 +200,9 @@ def eval(x, env=global_env):
 #@trace
 def CreateFunc(parms,body,env):
     def LAMBDA(*args):
-        print('it is ME!!!!')
-        return eval(body,Env(parms, args, env))
+        #print('it is ME!!!!')
+        localEnv = Env(parms, args, env)
+        return eval(body,localEnv)
     return LAMBDA    
 
 eval(parse('''(
@@ -231,6 +234,6 @@ class TestLisp(unittest.TestCase):
     pass
 if __name__ == "__main__":     
     import doctest
-    # doctest.testmod() 
+    doctest.testmod() 
     #unittest.main()
     import argparse        

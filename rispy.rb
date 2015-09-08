@@ -61,7 +61,10 @@ def reval(x, env=$global_env)
       env[var] = reval(exp, env)
     when :lambda                                        # (lambda (var*) exp)
       _, vars, exp = x
-      Proc.new { |*args| reval(exp, Env.new(vars, args, env)) }
+      Proc.new do |*args| 
+      localEnv = Env.new(vars, args, env)
+      reval(exp, localEnv) 
+      end #}
     when :begin                                    # (begin exp*)
       x[1..-1].inject([nil, env]) { |val_env, exp| [reval(exp, val_env[1]), val_env[1]]}[0]
     when :env
@@ -140,4 +143,4 @@ end
 #   print "usage: rispy.rb file.scm\n"
 # end
 
-#repl
+repl
