@@ -9,6 +9,8 @@
 3628800
 >>> eval(parse(' ((lambda (y) (((lambda (y) (lambda (x) (* y 2))) 3) 0)) 4)'))
 6
+>>> eval(parse('(if (list)1 0)'))
+0
 '''
 from __future__ import division
 import functools
@@ -143,7 +145,7 @@ global_env = standard_env()
 def repl(prompt='lis.py> '):
     "A prompt-read-eval-print loop."
     while True:
-        val = eval(parse(raw_input(prompt)))
+        val = eval(parse(input(prompt)))
         if val is not None: 
             print(lispstr(val))
 
@@ -164,7 +166,7 @@ class Procedure(object):
         return eval(self.body, Env(self.parms, args, self.env))
 
 ################ eval
-@trace
+#@trace
 def eval(x, env=global_env):
     "Evaluate an expression in an environment."
     if isinstance(x, Symbol):      # variable reference
@@ -228,12 +230,13 @@ eval(parse('''(
 #4
 #)'''))
 
-    
+#repl()    
+
 import unittest
 class TestLisp(unittest.TestCase):
     pass
 if __name__ == "__main__":     
     import doctest
-    #doctest.testmod() 
+    doctest.testmod() 
     #unittest.main()
     import argparse        
